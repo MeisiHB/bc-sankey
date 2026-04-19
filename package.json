@@ -1,0 +1,20 @@
+{
+  "name": "bc-sankey",
+  "version": "0.1.0",
+  "description": "Interactive Sankey P&L diagram for Microsoft Business Central",
+  "type": "module",
+  "scripts": {
+    "test":       "vitest run",
+    "test:watch": "vitest",
+    "test:ui":    "vitest --ui",
+    "coverage":   "vitest run --coverage"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.0",
+    "@vitest/coverage-v8": "^2.1.0"
+  },
+  "keywords": ["business-central", "sankey", "pnl", "visualization", "d3"],
+  "license": "MIT",
+  "homepage": "https://meisihb.github.io/bc-sankey/",
+  "repository": { "type": "git", "url": "https://github.com/MeisiHB/bc-sankey.git" }
+}
