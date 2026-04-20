@@ -1,10 +1,10 @@
 /**
- * bc-sankey.js  v1.2  — flush ribbon connections with rounded nodes
+ * bc-sankey.js  v1.2  â flush ribbon connections with rounded nodes
  *
- * Lösung für bündige Anschlüsse:
- * Ribbons werden 6px in die Knoten hinein verlängert (overlap).
- * Da Knoten nach Ribbons gezeichnet werden, decken sie den Überlapp ab.
- * Ergebnis: bündige Verbindung + abgerundete Außenkanten bleiben erhalten.
+ * LÃ¶sung fÃ¼r bÃ¼ndige AnschlÃ¼sse:
+ * Ribbons werden 6px in die Knoten hinein verlÃ¤ngert (overlap).
+ * Da Knoten nach Ribbons gezeichnet werden, decken sie den Ãberlapp ab.
+ * Ergebnis: bÃ¼ndige Verbindung + abgerundete AuÃenkanten bleiben erhalten.
  */
 'use strict';
 
@@ -82,12 +82,12 @@ class BCSankey {
     container.innerHTML = '';
     const d = this.data;
 
-    // ── Dimensionen ──────────────────────────────────────────────────────
+    // ââ Dimensionen ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     const W      = container.clientWidth || 960;
     const H      = Math.max(440, Math.min(W * 0.58, 620));
     const nw     = 114;   // Knotenbreite
     const nr     = 5;     // border-radius der Knoten
-    const ovlap  = nr + 2; // Ribbon-Überlapp in Knoten (muss >= nr sein für bündigen Anschluss)
+    const ovlap  = nr + 2; // Ribbon-Ãberlapp in Knoten (muss >= nr sein fÃ¼r bÃ¼ndigen Anschluss)
     const pad    = 10;   // Rand zum SVG-Rand
     const mt = 24, mb = 24;
     const iH     = H - mt - mb;
@@ -95,7 +95,7 @@ class BCSankey {
     const usableW = W - 2*pad - nw;
     const colX = col => pad + nw/2 + (col/(numCols-1)) * usableW;
 
-    // ── Knoten-Map ────────────────────────────────────────────────────────
+    // ââ Knoten-Map ââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     const nodeMap = {};
     d.nodes.forEach(n => {
       nodeMap[n.id] = { ...n,
@@ -113,7 +113,7 @@ class BCSankey {
       if (n.group === 'result' && n.value < 0) n.color = GROUP_COLORS_UNFAV['result'];
     });
 
-    // ── Knotenpositionierung ─────────────────────────────────────────────
+    // ââ Knotenpositionierung âââââââââââââââââââââââââââââââââââââââââââââ
     const maxVal  = Math.max(...Object.values(nodeMap).map(n=>n.value));
     const scale   = v => (v/maxVal) * iH * 0.82;
     const minH    = 26;
@@ -136,7 +136,7 @@ class BCSankey {
       });
     });
 
-    // ── SVG ───────────────────────────────────────────────────────────────
+    // ââ SVG âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
     const svg = d3.select('#'+this.containerId)
       .append('svg')
       .attr('id','sankey-svg')
@@ -145,7 +145,7 @@ class BCSankey {
 
     const defs = svg.append('defs');
 
-    // Schatten-Filter für Tiefenwirkung
+    // Schatten-Filter fÃ¼r Tiefenwirkung
     const filt = defs.append('filter').attr('id','rshadow')
       .attr('x','-5%').attr('y','-5%').attr('width','110%').attr('height','110%');
     filt.append('feDropShadow')
@@ -154,10 +154,10 @@ class BCSankey {
 
     const tooltip = this.tooltip;
 
-    // ── RIBBONS (vor Knoten gezeichnet) ───────────────────────────────────
+    // ââ RIBBONS (vor Knoten gezeichnet) âââââââââââââââââââââââââââââââââââ
     // KERN-FIX: x1 und x2 ragen ovlap px in die Knoten hinein.
-    // Die danach gezeichneten Knoten-Rechtecke decken diesen Überlapp ab →
-    // sauberer bündiger Anschluss, abgerundete Außenkanten bleiben erhalten.
+    // Die danach gezeichneten Knoten-Rechtecke decken diesen Ãberlapp ab â
+    // sauberer bÃ¼ndiger Anschluss, abgerundete AuÃenkanten bleiben erhalten.
 
     d.links.forEach((lk, i) => {
       const s = nodeMap[lk.source];
@@ -172,9 +172,9 @@ class BCSankey {
       s.outOffset += lh;
       t.inOffset  += lh;
 
-      // X mit Überlapp — Ribbon reicht ovlap px in den Knoten hinein
-      const x1 = s.cx + nw/2 + ovlap;   // hinter rechtem Rand des Quellknotens
-      const x2 = t.cx - nw/2 - ovlap;   // hinter linkem Rand des Zielknotens
+      // X mit Ãberlapp â Ribbon reicht ovlap px in den Knoten hinein
+      const x1 = s.cx + nw/2 - ovlap; // Ribbon ragt in Quellknoten   // hinter rechtem Rand des Quellknotens
+      const x2 = t.cx - nw/2 + ovlap; // Ribbon ragt in Zielknoten   // hinter linkem Rand des Zielknotens
       const cp = (x1 + x2) / 2;
 
       // Ribbon-Pfad (geschlossene Kurve)
@@ -185,7 +185,7 @@ class BCSankey {
         ' C'+cp+','+ty1+' '+cp+','+sy1+' '+x1+','+sy1+
         ' Z';
 
-      // Horizontaler Farb-Gradient (Quell → Ziel)
+      // Horizontaler Farb-Gradient (Quell â Ziel)
       const gid = 'g'+i;
       const gr = defs.append('linearGradient').attr('id',gid)
         .attr('x1','0%').attr('x2','100%');
@@ -193,7 +193,7 @@ class BCSankey {
       gr.append('stop').attr('offset','50%').attr('stop-color',mixColors(s.color,t.color)).attr('stop-opacity',0.58);
       gr.append('stop').attr('offset','100%').attr('stop-color',t.color).attr('stop-opacity',0.72);
 
-      // Vertikaler Glanz-Gradient (3D-Effekt, oben hell → unten dunkel)
+      // Vertikaler Glanz-Gradient (3D-Effekt, oben hell â unten dunkel)
       const hid = 'h'+i;
       const hg = defs.append('linearGradient').attr('id',hid)
         .attr('x1','0%').attr('x2','0%').attr('y1','0%').attr('y2','100%');
@@ -232,18 +232,18 @@ class BCSankey {
         });
     });
 
-    // ── KNOTEN (nach Ribbons — decken Überlapp ab) ────────────────────────
+    // ââ KNOTEN (nach Ribbons â decken Ãberlapp ab) ââââââââââââââââââââââââ
     Object.values(nodeMap).forEach(n => {
       const g = svg.append('g').style('cursor','pointer');
 
-      // Haupt-Rechteck (abgerundete Ecken — nur außen sichtbar, Innenseite unter Ribbon)
+      // Haupt-Rechteck (abgerundete Ecken â nur auÃen sichtbar, Innenseite unter Ribbon)
       g.append('rect')
         .attr('x',n.x).attr('y',n.y).attr('width',nw).attr('height',n.h)
         .attr('rx',nr)
         .attr('fill',n.color)
         .attr('opacity',0.95);
 
-      // Heller Streifen oben für 3D-Plastik-Optik
+      // Heller Streifen oben fÃ¼r 3D-Plastik-Optik
       g.append('rect')
         .attr('x',n.x).attr('y',n.y).attr('width',nw).attr('height',Math.min(5,n.h))
         .attr('rx',nr)
@@ -292,13 +292,13 @@ class BCSankey {
   }
 }
 
-// ── Bootstrap ─────────────────────────────────────────────────────────────
+// ââ Bootstrap âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 document.addEventListener('DOMContentLoaded', () => {
   const sankey = new BCSankey('sankey-container');
   window.bcSankey = sankey;
 
   sankey.loadUrl('./data/sample.json')
-    .catch(() => console.warn('sample.json not found — use file upload'));
+    .catch(() => console.warn('sample.json not found â use file upload'));
 
   const fi = document.getElementById('file-input');
   const ub = document.getElementById('upload-btn');
