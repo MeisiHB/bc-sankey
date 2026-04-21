@@ -1,41 +1,2636 @@
 {
-  "_comment": "bc-sankey sample data — Mittelstand P&L structure",
-  "title": "Gewinn- und Verlustrechnung 2024",
-  "period": "Geschäftsjahr 2024",
+  "_comment": "bc-sankey multi-period sample — 36 Monate Jan 2022 – Dez 2024",
+  "title": "P&L 2022–2024",
   "currency": "EUR",
-  "unit": 1000,
   "unit_label": "T€",
-
   "nodes": [
-    { "id": "inland",         "label": "Inland",          "group": "revenue-2" },
-    { "id": "export",         "label": "Export",           "group": "revenue-2" },
-    { "id": "service",        "label": "Service",          "group": "revenue-2" },
-    { "id": "prod-revenue",   "label": "Produktumsatz",    "group": "revenue-1" },
-    { "id": "svc-revenue",    "label": "Serviceumsatz",    "group": "revenue-1" },
-    { "id": "total-revenue",  "label": "Gesamtumsatz",     "group": "total"     },
-    { "id": "personnel",      "label": "Personal",         "group": "cost-1"    },
-    { "id": "material",       "label": "Material",         "group": "cost-1"    },
-    { "id": "other",          "label": "Sonstige Kosten",  "group": "cost-1"    },
-    { "id": "ebit",           "label": "EBIT",             "group": "result"    },
-    { "id": "wages",          "label": "Löhne & Gehälter", "group": "cost-2"    },
-    { "id": "social",         "label": "Sozialabgaben",    "group": "cost-2"    },
-    { "id": "rawmat",         "label": "Rohstoffe",        "group": "cost-2"    },
-    { "id": "energy",         "label": "Energie",          "group": "cost-2"    }
+    {
+      "id": "inland",
+      "label": "Inland",
+      "group": "revenue-2"
+    },
+    {
+      "id": "export",
+      "label": "Export",
+      "group": "revenue-2"
+    },
+    {
+      "id": "service",
+      "label": "Service",
+      "group": "revenue-2"
+    },
+    {
+      "id": "prod-revenue",
+      "label": "Produktumsatz",
+      "group": "revenue-1"
+    },
+    {
+      "id": "svc-revenue",
+      "label": "Serviceumsatz",
+      "group": "revenue-1"
+    },
+    {
+      "id": "total-revenue",
+      "label": "Gesamtumsatz",
+      "group": "total"
+    },
+    {
+      "id": "personnel",
+      "label": "Personal",
+      "group": "cost-1"
+    },
+    {
+      "id": "material",
+      "label": "Material",
+      "group": "cost-1"
+    },
+    {
+      "id": "other",
+      "label": "Sonstige Kosten",
+      "group": "cost-1"
+    },
+    {
+      "id": "ebit",
+      "label": "EBIT",
+      "group": "result"
+    },
+    {
+      "id": "wages",
+      "label": "Löhne & Gehälter",
+      "group": "cost-2"
+    },
+    {
+      "id": "social",
+      "label": "Sozialabgaben",
+      "group": "cost-2"
+    },
+    {
+      "id": "rawmat",
+      "label": "Rohstoffe",
+      "group": "cost-2"
+    },
+    {
+      "id": "energy",
+      "label": "Energie",
+      "group": "cost-2"
+    }
   ],
-
-  "links": [
-    { "source": "inland",       "target": "prod-revenue",  "value": 420 },
-    { "source": "export",       "target": "prod-revenue",  "value": 180 },
-    { "source": "service",      "target": "svc-revenue",   "value": 200 },
-    { "source": "prod-revenue", "target": "total-revenue", "value": 600 },
-    { "source": "svc-revenue",  "target": "total-revenue", "value": 200 },
-    { "source": "total-revenue","target": "personnel",     "value": 280 },
-    { "source": "total-revenue","target": "material",      "value": 180 },
-    { "source": "total-revenue","target": "other",         "value": 100 },
-    { "source": "total-revenue","target": "ebit",          "value": 240 },
-    { "source": "personnel",    "target": "wages",         "value": 200 },
-    { "source": "personnel",    "target": "social",        "value":  80 },
-    { "source": "material",     "target": "rawmat",        "value": 130 },
-    { "source": "material",     "target": "energy",        "value":  50 }
+  "periods": [
+    {
+      "label": "Jan 2022",
+      "key": "2022-01",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 324
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 139
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 153
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 463
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 153
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 216
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 135
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 77
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 188
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 154
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 62
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 97
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 38
+        }
+      ]
+    },
+    {
+      "label": "Feb 2022",
+      "key": "2022-02",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 331
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 142
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 157
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 473
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 157
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 221
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 138
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 79
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 192
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 158
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 63
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 100
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 38
+        }
+      ]
+    },
+    {
+      "label": "Mrz 2022",
+      "key": "2022-03",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 386
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 165
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 184
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 551
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 184
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 258
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 161
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 92
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 224
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 184
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 74
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 116
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 45
+        }
+      ]
+    },
+    {
+      "label": "Apr 2022",
+      "key": "2022-04",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 375
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 161
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 178
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 536
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 178
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 250
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 156
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 89
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 219
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 179
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 71
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 113
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 43
+        }
+      ]
+    },
+    {
+      "label": "Mai 2022",
+      "key": "2022-05",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 378
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 162
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 180
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 540
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 180
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 252
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 158
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 90
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 220
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 180
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 72
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 114
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 44
+        }
+      ]
+    },
+    {
+      "label": "Jun 2022",
+      "key": "2022-06",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 405
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 173
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 192
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 578
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 192
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 270
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 169
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 96
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 235
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 193
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 77
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 122
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 47
+        }
+      ]
+    },
+    {
+      "label": "Jul 2022",
+      "key": "2022-07",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 338
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 145
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 161
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 483
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 161
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 225
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 141
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 81
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 197
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 161
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 64
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 102
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 39
+        }
+      ]
+    },
+    {
+      "label": "Aug 2022",
+      "key": "2022-08",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 314
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 134
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 149
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 448
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 149
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 209
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 131
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 75
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 182
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 149
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 60
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 94
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 37
+        }
+      ]
+    },
+    {
+      "label": "Sep 2022",
+      "key": "2022-09",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 390
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 167
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 185
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 557
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 185
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 260
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 163
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 93
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 226
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 186
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 74
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 117
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 46
+        }
+      ]
+    },
+    {
+      "label": "Okt 2022",
+      "key": "2022-10",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 400
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 172
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 190
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 572
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 190
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 267
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 167
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 95
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 233
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 191
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 76
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 121
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 46
+        }
+      ]
+    },
+    {
+      "label": "Nov 2022",
+      "key": "2022-11",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 412
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 176
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 196
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 588
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 196
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 275
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 172
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 98
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 239
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 197
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 78
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 124
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 48
+        }
+      ]
+    },
+    {
+      "label": "Dez 2022",
+      "key": "2022-12",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 367
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 157
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 175
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 524
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 175
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 245
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 153
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 87
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 214
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 175
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 70
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 110
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 43
+        }
+      ]
+    },
+    {
+      "label": "Jan 2023",
+      "key": "2023-01",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 339
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 145
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 161
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 484
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 161
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 232
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 145
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 77
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 191
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 166
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 66
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 105
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 40
+        }
+      ]
+    },
+    {
+      "label": "Feb 2023",
+      "key": "2023-02",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 354
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 152
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 168
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 506
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 168
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 243
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 152
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 81
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 198
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 174
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 69
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 110
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 42
+        }
+      ]
+    },
+    {
+      "label": "Mrz 2023",
+      "key": "2023-03",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 408
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 175
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 194
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 583
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 194
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 280
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 175
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 93
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 229
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 200
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 80
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 126
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 49
+        }
+      ]
+    },
+    {
+      "label": "Apr 2023",
+      "key": "2023-04",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 385
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 165
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 183
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 550
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 183
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 264
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 165
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 88
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 216
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 189
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 75
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 119
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 46
+        }
+      ]
+    },
+    {
+      "label": "Mai 2023",
+      "key": "2023-05",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 400
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 172
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 191
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 572
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 191
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 275
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 172
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 92
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 224
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 197
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 78
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 124
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 48
+        }
+      ]
+    },
+    {
+      "label": "Jun 2023",
+      "key": "2023-06",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 428
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 183
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 203
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 611
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 203
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 293
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 183
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 98
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 240
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 210
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 83
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 132
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 51
+        }
+      ]
+    },
+    {
+      "label": "Jul 2023",
+      "key": "2023-07",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 354
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 152
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 168
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 506
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 168
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 243
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 152
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 81
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 198
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 174
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 69
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 110
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 42
+        }
+      ]
+    },
+    {
+      "label": "Aug 2023",
+      "key": "2023-08",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 335
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 143
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 159
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 478
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 159
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 229
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 143
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 76
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 189
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 164
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 65
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 103
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 40
+        }
+      ]
+    },
+    {
+      "label": "Sep 2023",
+      "key": "2023-09",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 408
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 175
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 194
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 583
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 194
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 280
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 175
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 93
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 229
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 200
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 80
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 126
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 49
+        }
+      ]
+    },
+    {
+      "label": "Okt 2023",
+      "key": "2023-10",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 428
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 183
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 203
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 611
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 203
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 293
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 183
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 98
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 240
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 210
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 83
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 132
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 51
+        }
+      ]
+    },
+    {
+      "label": "Nov 2023",
+      "key": "2023-11",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 435
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 187
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 207
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 622
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 207
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 299
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 187
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 99
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 244
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 214
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 85
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 135
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 52
+        }
+      ]
+    },
+    {
+      "label": "Dez 2023",
+      "key": "2023-12",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 381
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 163
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 181
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 544
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 181
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 261
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 163
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 87
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 214
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 187
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 74
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 118
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 45
+        }
+      ]
+    },
+    {
+      "label": "Jan 2024",
+      "key": "2024-01",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 365
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 157
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 174
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 522
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 174
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 254
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 150
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 84
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 208
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 182
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 72
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 108
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 42
+        }
+      ]
+    },
+    {
+      "label": "Feb 2024",
+      "key": "2024-02",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 382
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 164
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 182
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 546
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 182
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 266
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 157
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 87
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 218
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 190
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 76
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 113
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 44
+        }
+      ]
+    },
+    {
+      "label": "Mrz 2024",
+      "key": "2024-03",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 441
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 189
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 210
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 630
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 210
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 307
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 181
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 101
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 251
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 219
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 88
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 130
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 51
+        }
+      ]
+    },
+    {
+      "label": "Apr 2024",
+      "key": "2024-04",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 420
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 180
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 200
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 600
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 200
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 292
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 172
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 96
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 240
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 208
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 84
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 124
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 48
+        }
+      ]
+    },
+    {
+      "label": "Mai 2024",
+      "key": "2024-05",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 437
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 187
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 208
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 624
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 208
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 304
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 179
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 100
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 249
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 217
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 87
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 129
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 50
+        }
+      ]
+    },
+    {
+      "label": "Jun 2024",
+      "key": "2024-06",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 462
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 198
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 220
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 660
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 220
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 321
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 189
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 106
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 264
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 229
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 92
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 136
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 53
+        }
+      ]
+    },
+    {
+      "label": "Jul 2024",
+      "key": "2024-07",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 382
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 164
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 182
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 546
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 182
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 266
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 157
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 87
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 218
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 190
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 76
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 113
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 44
+        }
+      ]
+    },
+    {
+      "label": "Aug 2024",
+      "key": "2024-08",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 358
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 154
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 171
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 512
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 171
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 249
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 147
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 82
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 205
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 178
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 71
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 106
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 41
+        }
+      ]
+    },
+    {
+      "label": "Sep 2024",
+      "key": "2024-09",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 441
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 189
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 210
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 630
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 210
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 307
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 181
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 101
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 251
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 219
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 88
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 130
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 51
+        }
+      ]
+    },
+    {
+      "label": "Okt 2024",
+      "key": "2024-10",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 462
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 198
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 220
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 660
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 220
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 321
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 189
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 106
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 264
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 229
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 92
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 136
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 53
+        }
+      ]
+    },
+    {
+      "label": "Nov 2024",
+      "key": "2024-11",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 470
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 202
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 224
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 672
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 224
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 327
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 193
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 108
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 268
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 233
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 94
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 139
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 54
+        }
+      ]
+    },
+    {
+      "label": "Dez 2024",
+      "key": "2024-12",
+      "links": [
+        {
+          "source": "inland",
+          "target": "prod-revenue",
+          "value": 412
+        },
+        {
+          "source": "export",
+          "target": "prod-revenue",
+          "value": 176
+        },
+        {
+          "source": "service",
+          "target": "svc-revenue",
+          "value": 196
+        },
+        {
+          "source": "prod-revenue",
+          "target": "total-revenue",
+          "value": 588
+        },
+        {
+          "source": "svc-revenue",
+          "target": "total-revenue",
+          "value": 196
+        },
+        {
+          "source": "total-revenue",
+          "target": "personnel",
+          "value": 286
+        },
+        {
+          "source": "total-revenue",
+          "target": "material",
+          "value": 169
+        },
+        {
+          "source": "total-revenue",
+          "target": "other",
+          "value": 94
+        },
+        {
+          "source": "total-revenue",
+          "target": "ebit",
+          "value": 235
+        },
+        {
+          "source": "personnel",
+          "target": "wages",
+          "value": 204
+        },
+        {
+          "source": "personnel",
+          "target": "social",
+          "value": 82
+        },
+        {
+          "source": "material",
+          "target": "rawmat",
+          "value": 122
+        },
+        {
+          "source": "material",
+          "target": "energy",
+          "value": 47
+        }
+      ]
+    }
   ]
 }
