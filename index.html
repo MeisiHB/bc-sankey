@@ -4,37 +4,77 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bc-sankey — P&amp;L Visualisierung</title>
-
-  <!-- D3.js v7 via CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-
-  <!-- BC Style -->
   <link rel="stylesheet" href="css/bc-sankey.css" />
+  <style>
+    .bc-toolbar--anim {
+      background:#fff; border:1px solid #E0E0E0; border-radius:var(--bc-radius);
+      padding:0.6rem 1.25rem; margin-bottom:1rem;
+      display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;
+    }
+    .bc-toolbar__sep { width:1px; height:22px; background:#E0E0E0; margin:0 0.3rem; flex-shrink:0; }
+    .bc-btn--toggle {
+      font-family:var(--bc-font); font-size:var(--bc-size-sm);
+      padding:0.3rem 0.75rem; border-radius:var(--bc-radius);
+      border:1px solid #C8C8C8; background:#fff; color:var(--bc-secondary); cursor:pointer;
+      transition:background 0.15s,color 0.15s,border-color 0.15s;
+    }
+    .bc-btn--toggle:hover { border-color:var(--bc-primary); color:var(--bc-primary); }
+    .bc-btn--toggle.active { background:var(--bc-primary); border-color:var(--bc-primary); color:#fff; }
+    .bc-btn--play {
+      font-family:var(--bc-font-bold); font-size:var(--bc-size-sm);
+      padding:0.3rem 1rem; border-radius:var(--bc-radius);
+      border:1px solid var(--bc-primary); background:var(--bc-primary);
+      color:#fff; cursor:pointer; min-width:90px; transition:background 0.15s;
+    }
+    .bc-btn--play:hover { background:var(--bc-primary-dark); border-color:var(--bc-primary-dark); }
+    .bc-select {
+      font-family:var(--bc-font); font-size:var(--bc-size-sm); color:var(--bc-secondary);
+      border:1px solid #C8C8C8; border-radius:var(--bc-radius);
+      padding:0.28rem 0.5rem; background:#fff; cursor:pointer; outline:none; max-width:130px;
+    }
+    .bc-select:hover, .bc-select:focus { border-color:var(--bc-primary); }
+    .bc-period-badge {
+      margin-left:auto; font-family:var(--bc-font-bold);
+      font-size:var(--bc-size-sm-plus); color:var(--bc-primary); white-space:nowrap;
+    }
+  </style>
 </head>
 <body>
-
 <div class="bc-app">
 
-  <!-- ── Header ──────────────────────────────────────────────────────── -->
   <header class="bc-header">
     <div class="bc-header__logo">
       <div class="bc-header__icon">S</div>
       <span class="bc-header__title"><strong>bc-sankey</strong> · P&amp;L Visualisierung</span>
     </div>
-    <div style="font-size:9pt; color:#A7ADB6;">Phase 1 · Open Source · MIT</div>
+    <div style="font-size:9pt;color:#A7ADB6;">Phase 2 · Open Source · MIT</div>
   </header>
 
-  <!-- ── Toolbar ─────────────────────────────────────────────────────── -->
   <div class="bc-toolbar">
     <span class="bc-toolbar__label">Daten:</span>
     <button class="bc-btn bc-btn--primary" id="upload-btn">JSON laden</button>
     <input type="file" id="file-input" accept=".json" style="display:none;" />
-    <span class="bc-toolbar__label" style="margin-left:auto; font-size:9pt;">
+    <span class="bc-toolbar__label" style="margin-left:auto;font-size:9pt;">
       Beispieldaten: <code>data/sample.json</code>
     </span>
   </div>
 
-  <!-- ── KPI Cards ───────────────────────────────────────────────────── -->
+  <div class="bc-toolbar--anim">
+    <span class="bc-toolbar__label">Intervall:</span>
+    <button class="bc-btn--toggle active" id="btn-month">Monat</button>
+    <button class="bc-btn--toggle"        id="btn-quarter">Quartal</button>
+    <button class="bc-btn--toggle"        id="btn-year">Jahr</button>
+    <div class="bc-toolbar__sep"></div>
+    <span class="bc-toolbar__label">Von:</span>
+    <select class="bc-select" id="sel-from"></select>
+    <span class="bc-toolbar__label">Bis:</span>
+    <select class="bc-select" id="sel-to"></select>
+    <div class="bc-toolbar__sep"></div>
+    <button class="bc-btn--play" id="btn-play">&#9654; Start</button>
+    <span class="bc-period-badge" id="current-period">—</span>
+  </div>
+
   <div class="bc-kpi-row">
     <div class="bc-kpi" id="kpi-revenue">
       <div class="bc-kpi__label">Gesamtumsatz</div>
@@ -53,57 +93,27 @@
     </div>
   </div>
 
-  <!-- ── Diagram Card ─────────────────────────────────────────────────── -->
   <div class="bc-card">
     <div class="bc-card__header">
       <span class="bc-card__title" id="diagram-title">Sankey P&amp;L</span>
-      <span style="font-size:9pt; color:#A7ADB6;">Bewege die Maus über Knoten und Flüsse für Details</span>
+      <span style="font-size:9pt;color:#A7ADB6;">Bewege die Maus über Knoten und Flüsse für Details</span>
     </div>
-
-    <!-- Sankey container -->
     <div id="sankey-container"></div>
-
-    <!-- Drop zone (shown when no data) -->
-    <div id="drop-zone" class="bc-upload" style="margin-top:0.75rem; display:none;">
+    <div id="drop-zone" class="bc-upload" style="margin-top:0.75rem;display:none;">
       JSON-Datei hier ablegen oder <strong>JSON laden</strong> klicken
     </div>
-
-    <!-- Legend -->
     <div class="bc-legend">
-      <div class="bc-legend__item">
-        <div class="bc-legend__swatch" style="background:#75B5E7;"></div>
-        Umsatz (Ebene 2)
-      </div>
-      <div class="bc-legend__item">
-        <div class="bc-legend__swatch" style="background:#378ADD;"></div>
-        Umsatz (Ebene 1)
-      </div>
-      <div class="bc-legend__item">
-        <div class="bc-legend__swatch" style="background:#00B7C3;"></div>
-        Gesamtumsatz
-      </div>
-      <div class="bc-legend__item">
-        <div class="bc-legend__swatch" style="background:#E89E63;"></div>
-        Kostengruppen
-      </div>
-      <div class="bc-legend__item">
-        <div class="bc-legend__swatch" style="background:#C9C472;"></div>
-        Unterkosten
-      </div>
-      <div class="bc-legend__item">
-        <div class="bc-legend__swatch" style="background:#35AB22;"></div>
-        Ergebnis (EBIT)
-      </div>
+      <div class="bc-legend__item"><div class="bc-legend__swatch" style="background:#75B5E7;"></div>Umsatz (Ebene 2)</div>
+      <div class="bc-legend__item"><div class="bc-legend__swatch" style="background:#378ADD;"></div>Umsatz (Ebene 1)</div>
+      <div class="bc-legend__item"><div class="bc-legend__swatch" style="background:#00B7C3;"></div>Gesamtumsatz</div>
+      <div class="bc-legend__item"><div class="bc-legend__swatch" style="background:#E89E63;"></div>Kostengruppen</div>
+      <div class="bc-legend__item"><div class="bc-legend__swatch" style="background:#C9C472;"></div>Unterkosten</div>
+      <div class="bc-legend__item"><div class="bc-legend__swatch" style="background:#35AB22;"></div>Ergebnis (EBIT)</div>
     </div>
   </div>
 
-</div><!-- /.bc-app -->
-
-<!-- ── Tooltip ───────────────────────────────────────────────────────── -->
+</div>
 <div class="bc-tooltip" id="bc-tooltip"></div>
-
-<!-- bc-sankey core -->
 <script src="js/bc-sankey.js"></script>
-
 </body>
 </html>
