@@ -1,26 +1,59 @@
 /*
- * bc-sankey.css  v1.1
- * Business Central Style Guide compliant
+ * bc-sankey.css
+ * Business Central Style Guide compliant stylesheet
+ * Based on: https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/developer/devenv-control-addin-style
  */
 
+/* ── Design Tokens (BC / Dynamics 365) ─────────────────────────────────── */
 :root {
+  /* Primary palette */
   --bc-primary:       #00B7C3;
   --bc-primary-dark:  #008089;
   --bc-secondary:     #505C6D;
   --bc-text:          #212121;
   --bc-text-muted:    #A7ADB6;
+
+  /* Semantic colors */
   --bc-favorable:     #35AB22;
   --bc-unfavorable:   #EB6965;
-  --bc-font:          "Segoe UI","Segoe WP",Segoe,device-segoe,Tahoma,Helvetica,Arial,sans-serif;
-  --bc-font-light:    "Segoe UI Light","Segoe WP Light",device-segoe-light,"Segoe WP Semilight","Segoe UI","Segoe WP",Segoe,Tahoma,Helvetica,Arial,sans-serif;
-  --bc-font-semi:     "Segoe UI Semilight","Segoe WP Semilight",device-segoe-semilight,"Segoe UI","Segoe WP",Segoe,Tahoma,Helvetica,Arial,sans-serif;
-  --bc-font-bold:     "Segoe UI Semibold","Segoe WP Semibold",device-segoe-semibold,"Segoe UI","Segoe WP",Segoe,Tahoma,Helvetica,Arial,sans-serif;
-  --bc-size-xs:  9pt; --bc-size-sm: 10.5pt; --bc-size-sm-plus: 12pt;
-  --bc-size-md:  13.5pt; --bc-size-md-plus: 15pt; --bc-size-lg: 18pt;
-  --bc-radius:   4px; --bc-radius-lg: 8px;
-  --bc-shadow:   0 2px 8px rgba(0,0,0,0.10);
+  --bc-ambiguous:     #9F9700;
+  --bc-accent:        #00B7C3;
+
+  /* Chart palette (BC official) */
+  --bc-blue:          #75B5E7;
+  --bc-blue-dark:     #378ADD;
+  --bc-teal:          #39B294;
+  --bc-lightgreen:    #59CCB4;
+  --bc-yellow:        #C9C472;
+  --bc-orange:        #E89E63;
+  --bc-violet:        #DBBDEB;
+  --bc-red:           #E97768;
+  --bc-green:         #88CE81;
+  --bc-sky:           #75D8E7;
+
+  /* Typography */
+  --bc-font:          "Segoe UI", "Segoe WP", Segoe, device-segoe, Tahoma, Helvetica, Arial, sans-serif;
+  --bc-font-light:    "Segoe UI Light", "Segoe WP Light", device-segoe-light, "Segoe WP Semilight", "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
+  --bc-font-semi:     "Segoe UI Semilight", "Segoe WP Semilight", device-segoe-semilight, "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
+  --bc-font-bold:     "Segoe UI Semibold", "Segoe WP Semibold", device-segoe-semibold, "Segoe UI", "Segoe WP", Segoe, Tahoma, Helvetica, Arial, sans-serif;
+
+  /* Font sizes (BC scale) */
+  --bc-size-xs:       9pt;
+  --bc-size-sm:       10.5pt;
+  --bc-size-sm-plus:  12pt;
+  --bc-size-md:       13.5pt;
+  --bc-size-md-plus:  15pt;
+  --bc-size-lg:       18pt;
+  --bc-size-lg-plus:  22.5pt;
+  --bc-size-xl:       30pt;
+
+  /* Layout */
+  --bc-radius:        4px;
+  --bc-radius-lg:     8px;
+  --bc-shadow:        0 2px 8px rgba(0,0,0,0.10);
 }
 
+/* ── Reset & Base ───────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
@@ -31,99 +64,343 @@ body {
   min-height: 100vh;
 }
 
-.bc-app { max-width: 1280px; margin: 0 auto; padding: 0 1rem 2rem; }
+/* ── App Shell ──────────────────────────────────────────────────────────── */
+.bc-app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
 
+/* ── Header ─────────────────────────────────────────────────────────────── */
 .bc-header {
   background: #fff;
   border-bottom: 2px solid var(--bc-primary);
   padding: 0.75rem 1.5rem;
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 1.25rem;
 }
-.bc-header__logo { display: flex; align-items: center; gap: 10px; }
-.bc-header__icon {
-  width: 32px; height: 32px; background: var(--bc-primary);
-  border-radius: var(--bc-radius); display: flex; align-items: center;
-  justify-content: center; color: #fff; font-size: 16px;
-  font-weight: bold; font-family: var(--bc-font-bold);
-}
-.bc-header__title { font-family: var(--bc-font-light); font-size: var(--bc-size-md-plus); color: var(--bc-secondary); }
-.bc-header__title strong { font-family: var(--bc-font-bold); color: var(--bc-primary); font-weight: normal; }
 
-.bc-toolbar {
-  background: #fff; border: 1px solid #E0E0E0;
-  border-radius: var(--bc-radius); padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+.bc-header__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.bc-toolbar__label { font-size: var(--bc-size-sm); color: var(--bc-secondary); font-family: var(--bc-font-semi); }
+
+.bc-header__icon {
+  width: 32px;
+  height: 32px;
+  background: var(--bc-primary);
+  border-radius: var(--bc-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: var(--bc-font-bold);
+}
+
+.bc-header__title {
+  font-family: var(--bc-font-light);
+  font-size: var(--bc-size-md-plus);
+  color: var(--bc-secondary);
+  letter-spacing: 0.01em;
+}
+
+.bc-header__title strong {
+  font-family: var(--bc-font-bold);
+  color: var(--bc-primary);
+  font-weight: normal;
+}
+
+/* ── Toolbar ─────────────────────────────────────────────────────────────── */
+.bc-toolbar {
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--bc-radius);
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.bc-toolbar__label {
+  font-size: var(--bc-size-sm);
+  color: var(--bc-secondary);
+  font-family: var(--bc-font-semi);
+}
 
 .bc-btn {
-  font-family: var(--bc-font); font-size: var(--bc-size-sm);
-  padding: 0.35rem 0.85rem; border-radius: var(--bc-radius);
-  border: 1px solid var(--bc-secondary); background: #fff;
-  color: var(--bc-secondary); cursor: pointer; transition: background 0.15s, color 0.15s;
+  font-family: var(--bc-font);
+  font-size: var(--bc-size-sm);
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--bc-radius);
+  border: 1px solid var(--bc-secondary);
+  background: #fff;
+  color: var(--bc-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
 }
-.bc-btn:hover { background: var(--bc-secondary); color: #fff; }
-.bc-btn--primary { background: var(--bc-primary); color: #fff; border-color: var(--bc-primary); }
-.bc-btn--primary:hover { background: var(--bc-primary-dark); border-color: var(--bc-primary-dark); }
 
-.bc-kpi-row { display: grid; grid-template-columns: repeat(auto-fit,minmax(160px,1fr)); gap: 0.75rem; margin-bottom: 1rem; }
-.bc-kpi { background: #fff; border: 1px solid #E0E0E0; border-radius: var(--bc-radius); padding: 0.75rem 1rem; border-left: 3px solid var(--bc-primary); }
-.bc-kpi--favorable  { border-left-color: var(--bc-favorable); }
-.bc-kpi--unfavorable{ border-left-color: var(--bc-unfavorable); }
-.bc-kpi__label { font-size: var(--bc-size-xs); color: var(--bc-secondary); font-family: var(--bc-font-semi); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.2rem; }
-.bc-kpi__value { font-size: var(--bc-size-lg); font-family: var(--bc-font-light); color: var(--bc-text); line-height: 1.1; }
-.bc-kpi__value--favorable   { color: var(--bc-favorable); }
+.bc-btn:hover {
+  background: var(--bc-secondary);
+  color: #fff;
+}
+
+.bc-btn--primary {
+  background: var(--bc-primary);
+  color: #fff;
+  border-color: var(--bc-primary);
+}
+
+.bc-btn--primary:hover {
+  background: var(--bc-primary-dark);
+  border-color: var(--bc-primary-dark);
+}
+
+/* ── KPI Cards ───────────────────────────────────────────────────────────── */
+.bc-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.bc-kpi {
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--bc-radius);
+  padding: 0.75rem 1rem;
+  border-left: 3px solid var(--bc-primary);
+}
+
+.bc-kpi--favorable { border-left-color: var(--bc-favorable); }
+.bc-kpi--unfavorable { border-left-color: var(--bc-unfavorable); }
+
+.bc-kpi__label {
+  font-size: var(--bc-size-xs);
+  color: var(--bc-secondary);
+  font-family: var(--bc-font-semi);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.2rem;
+}
+
+.bc-kpi__value {
+  font-size: var(--bc-size-lg);
+  font-family: var(--bc-font-light);
+  color: var(--bc-text);
+  line-height: 1.1;
+}
+
+.bc-kpi__value--favorable { color: var(--bc-favorable); }
 .bc-kpi__value--unfavorable { color: var(--bc-unfavorable); }
-.bc-kpi__sub { font-size: var(--bc-size-xs); color: var(--bc-text-muted); margin-top: 0.15rem; }
 
+.bc-kpi__sub {
+  font-size: var(--bc-size-xs);
+  color: var(--bc-text-muted);
+  margin-top: 0.15rem;
+}
+
+/* ── Diagram Card ────────────────────────────────────────────────────────── */
 .bc-card {
-  background: #fff; border: 1px solid #E0E0E0;
-  border-radius: var(--bc-radius-lg); box-shadow: var(--bc-shadow);
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--bc-radius-lg);
+  box-shadow: var(--bc-shadow);
   padding: 1.25rem 1.5rem;
 }
+
 .bc-card__header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid #F0F0F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #F0F0F0;
 }
-.bc-card__title { font-family: var(--bc-font-semi); font-size: var(--bc-size-md); color: var(--bc-secondary); }
 
-/* Sankey SVG — KEIN fill:none auf Ribbons */
-#sankey-svg { width: 100%; display: block; overflow: visible; }
+.bc-card__title {
+  font-family: var(--bc-font-semi);
+  font-size: var(--bc-size-md);
+  color: var(--bc-secondary);
+}
 
-.sankey-node rect { cursor: pointer; }
-.sankey-node rect:hover { opacity: 0.85; }
-.sankey-node text { pointer-events: none; }
+/* ── Sankey SVG ──────────────────────────────────────────────────────────── */
+#sankey-svg {
+  width: 100%;
+  display: block;
+}
 
-/* FIX: fill:none entfernt — Ribbons werden jetzt korrekt als Flächen gezeichnet */
-/* .sankey-link wurde entfernt um CSS-Override zu vermeiden */
+.sankey-node rect {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
 
+.sankey-node rect:hover { opacity: 0.82; }
+
+.sankey-node text {
+  font-family: var(--bc-font);
+  pointer-events: none;
+}
+
+.sankey-link {
+  fill: none;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.sankey-link:hover { opacity: 0.75; }
+
+/* ── Legend ──────────────────────────────────────────────────────────────── */
 .bc-legend {
-  display: flex; gap: 1.25rem; flex-wrap: wrap;
-  margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid #F0F0F0;
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F0F0F0;
 }
-.bc-legend__item { display: flex; align-items: center; gap: 6px; font-size: var(--bc-size-xs); color: var(--bc-secondary); }
-.bc-legend__swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
 
+.bc-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--bc-size-xs);
+  color: var(--bc-secondary);
+}
+
+.bc-legend__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Tooltip ─────────────────────────────────────────────────────────────── */
 .bc-tooltip {
-  position: fixed; background: var(--bc-secondary); color: #fff;
-  font-family: var(--bc-font); font-size: var(--bc-size-xs);
-  padding: 0.45rem 0.75rem; border-radius: var(--bc-radius);
-  pointer-events: none; opacity: 0; transition: opacity 0.15s;
-  z-index: 1000; max-width: 240px; line-height: 1.5;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  position: fixed;
+  background: var(--bc-secondary);
+  color: #fff;
+  font-family: var(--bc-font);
+  font-size: var(--bc-size-xs);
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--bc-radius);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 1000;
+  max-width: 220px;
+  line-height: 1.5;
 }
+
 .bc-tooltip.visible { opacity: 1; }
-.bc-tooltip__title { font-family: var(--bc-font-bold); font-size: var(--bc-size-sm); margin-bottom: 2px; }
 
-.bc-upload {
-  border: 2px dashed #C8C8C8; border-radius: var(--bc-radius);
-  padding: 1.5rem; text-align: center; color: var(--bc-text-muted);
-  font-size: var(--bc-size-sm); cursor: pointer; transition: border-color 0.2s, background 0.2s;
+.bc-tooltip__title {
+  font-family: var(--bc-font-bold);
+  font-size: var(--bc-size-sm);
+  margin-bottom: 2px;
 }
-.bc-upload:hover { border-color: var(--bc-primary); background: rgba(0,183,195,0.04); color: var(--bc-primary); }
 
+/* ── Upload Area ─────────────────────────────────────────────────────────── */
+.bc-upload {
+  border: 2px dashed #C8C8C8;
+  border-radius: var(--bc-radius);
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--bc-text-muted);
+  font-size: var(--bc-size-sm);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.bc-upload:hover {
+  border-color: var(--bc-primary);
+  background: rgba(0,183,195,0.04);
+  color: var(--bc-primary);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .bc-header { padding: 0.6rem 1rem; }
   .bc-kpi__value { font-size: var(--bc-size-md-plus); }
+}
+
+/* ── Animations-Steuerleiste (Phase 2) ─────────────────────────────────── */
+.bc-anim-bar {
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--bc-radius);
+  padding: .6rem 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.bc-anim-section {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.bc-anim-label {
+  font-size: var(--bc-size-xs);
+  color: var(--bc-secondary);
+  font-family: var(--bc-font-semi);
+  white-space: nowrap;
+}
+
+.bc-anim-btns {
+  display: flex;
+  gap: .3rem;
+}
+
+.bc-anim-btns .bc-btn {
+  padding: .25rem .65rem;
+  font-size: var(--bc-size-xs);
+}
+
+.bc-anim-period {
+  margin-left: auto;
+  font-family: var(--bc-font-light);
+  font-size: var(--bc-size-md);
+  color: var(--bc-primary);
+  min-width: 7rem;
+  text-align: right;
+  font-weight: 500;
+}
+
+.bc-select {
+  font-family: var(--bc-font);
+  font-size: var(--bc-size-xs);
+  color: var(--bc-text);
+  background: #fff;
+  border: 1px solid #C8C8C8;
+  border-radius: var(--bc-radius);
+  padding: .25rem .5rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color .15s;
+}
+.bc-select:hover, .bc-select:focus { border-color: var(--bc-primary); }
+
+#btn-play, #btn-stop {
+  min-width: 5.5rem;
+  font-size: var(--bc-size-xs);
+}
+
+#btn-play:disabled, #btn-stop:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+/* Sankey-Container Überblend-Transition */
+#sankey-container {
+  transition: opacity 200ms ease;
 }
