@@ -11,10 +11,14 @@
   },
   "devDependencies": {
     "vitest": "^2.1.0",
-    "@vitest/coverage-v8": "^2.1.0"
+    "@vitest/coverage-v8": "^2.1.0",
+    "happy-dom": "^15.0.0"
   },
   "keywords": ["business-central", "sankey", "pnl", "visualization", "d3"],
   "license": "MIT",
   "homepage": "https://meisihb.github.io/bc-sankey/",
-  "repository": { "type": "git", "url": "https://github.com/MeisiHB/bc-sankey.git" }
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MeisiHB/bc-sankey.git"
+  }
 }
