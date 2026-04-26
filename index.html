@@ -5,66 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>bc-sankey — P&amp;L Visualisierung</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <script src="https://alcdn.msauth.net/browser/3.27.0/js/msal-browser.min.js"></script>
   <link rel="stylesheet" href="css/bc-sankey.css" />
+  <link rel="stylesheet" href="css/bc-settings.css" />
   <style>
-    .bc-toolbar--anim {
-      background:#fff; border:1px solid #E0E0E0; border-radius:var(--bc-radius);
-      padding:0.6rem 1.25rem; margin-bottom:1rem;
-      display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap;
-    }
-    .bc-toolbar__sep { width:1px; height:22px; background:#E0E0E0; margin:0 0.3rem; flex-shrink:0; }
-    .bc-btn--toggle {
-      font-family:var(--bc-font); font-size:var(--bc-size-sm);
-      padding:0.3rem 0.75rem; border-radius:var(--bc-radius);
-      border:1px solid #C8C8C8; background:#fff; color:var(--bc-secondary); cursor:pointer;
-      transition:background 0.15s,color 0.15s,border-color 0.15s;
-    }
-    .bc-btn--toggle:hover { border-color:var(--bc-primary); color:var(--bc-primary); }
-    .bc-btn--toggle.active { background:var(--bc-primary); border-color:var(--bc-primary); color:#fff; }
-    .bc-btn--play {
-      font-family:var(--bc-font-bold); font-size:var(--bc-size-sm);
-      padding:0.3rem 1rem; border-radius:var(--bc-radius);
-      border:1px solid var(--bc-primary); background:var(--bc-primary);
-      color:#fff; cursor:pointer; min-width:90px; transition:background 0.15s;
-    }
-    .bc-btn--play:hover { background:var(--bc-primary-dark); border-color:var(--bc-primary-dark); }
-    .bc-select {
-      font-family:var(--bc-font); font-size:var(--bc-size-sm); color:var(--bc-secondary);
-      border:1px solid #C8C8C8; border-radius:var(--bc-radius);
-      padding:0.28rem 0.5rem; background:#fff; cursor:pointer; outline:none; max-width:130px;
-    }
-    .bc-select:hover, .bc-select:focus { border-color:var(--bc-primary); }
-    .bc-period-badge {
-      margin-left:auto; font-family:var(--bc-font-bold);
-      font-size:var(--bc-size-sm-plus); color:var(--bc-primary); white-space:nowrap;
-    }
+    .bc-toolbar--anim{background:#fff;border:1px solid #E0E0E0;border-radius:var(--bc-radius);padding:0.6rem 1.25rem;margin-bottom:1rem;display:flex;align-items:center;gap:0.6rem;flex-wrap:wrap}
+    .bc-toolbar__sep{width:1px;height:22px;background:#E0E0E0;margin:0 0.3rem;flex-shrink:0}
+    .bc-btn--toggle{font-family:var(--bc-font);font-size:var(--bc-size-sm);padding:0.3rem 0.75rem;border-radius:var(--bc-radius);border:1px solid #C8C8C8;background:#fff;color:var(--bc-secondary);cursor:pointer;transition:background 0.15s,color 0.15s,border-color 0.15s}
+    .bc-btn--toggle:hover{border-color:var(--bc-primary);color:var(--bc-primary)}
+    .bc-btn--toggle.active{background:var(--bc-primary);border-color:var(--bc-primary);color:#fff}
+    .bc-btn--play{font-family:var(--bc-font-bold);font-size:var(--bc-size-sm);padding:0.3rem 1rem;border-radius:var(--bc-radius);border:1px solid var(--bc-primary);background:var(--bc-primary);color:#fff;cursor:pointer;min-width:90px;transition:background 0.15s}
+    .bc-btn--play:hover{background:var(--bc-primary-dark);border-color:var(--bc-primary-dark)}
+    .bc-select{font-family:var(--bc-font);font-size:var(--bc-size-sm);color:var(--bc-secondary);border:1px solid #C8C8C8;border-radius:var(--bc-radius);padding:0.28rem 0.5rem;background:#fff;cursor:pointer;outline:none;max-width:130px}
+    .bc-select:hover,.bc-select:focus{border-color:var(--bc-primary)}
+    .bc-period-badge{margin-left:auto;font-family:var(--bc-font-bold);font-size:var(--bc-size-sm-plus);color:var(--bc-primary);white-space:nowrap}
+    .bc-btn--schema{display:none;font-family:var(--bc-font);font-size:var(--bc-size-sm);padding:0.35rem 0.85rem;border-radius:var(--bc-radius);border:1px solid var(--bc-secondary);background:#fff;color:var(--bc-secondary);cursor:pointer;transition:background 0.15s,color 0.15s;align-items:center;gap:5px}
+    .bc-btn--schema:hover{background:var(--bc-secondary);color:#fff}
+    .bc-btn--schema.visible{display:inline-flex}
+    .bc-schema-name{font-size:var(--bc-size-xs);background:rgba(0,183,195,0.1);color:var(--bc-primary);border-radius:3px;padding:1px 5px;font-family:var(--bc-font-bold);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   </style>
 </head>
 <body>
 <div class="bc-app">
-
   <header class="bc-header">
     <div class="bc-header__logo">
       <div class="bc-header__icon">S</div>
-      <span class="bc-header__title"><strong>bc-sankey</strong> · P&amp;L Visualisierung</span>
+      <span class="bc-header__title"><strong>bc-sankey</strong> &middot; P&amp;L Visualisierung</span>
     </div>
-    <div style="font-size:9pt;color:#A7ADB6;">Phase 2 · Open Source · MIT</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="bc-account-badge" id="account-badge" style="display:none" title="Abmelden">
+        <div class="bc-account-badge__avatar" id="account-avatar">?</div>
+        <span class="bc-account-badge__name" id="account-name">&mdash;</span>
+      </div>
+      <button class="bc-btn--gear" id="btn-settings" title="Einstellungen" aria-label="Einstellungen">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.474l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/></svg>
+      </button>
+      <div style="font-size:9pt;color:#A7ADB6;margin-left:4px;">Phase 2 &middot; MIT</div>
+    </div>
   </header>
-
+  <div class="bc-login-banner" id="login-banner" style="display:none">
+    <div class="bc-login-banner__text">
+      <strong>Business Central-Verbindung verfügbar</strong>
+      Melde dich an, um Kontenschemas direkt aus BC zu laden.
+    </div>
+    <button class="bc-btn--ms" id="btn-login">
+      <svg width="18" height="18" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
+      Mit Microsoft anmelden
+    </button>
+  </div>
   <div class="bc-toolbar">
     <span class="bc-toolbar__label">Daten:</span>
     <button class="bc-btn bc-btn--primary" id="upload-btn">JSON laden</button>
     <input type="file" id="file-input" accept=".json" style="display:none;" />
-    <span class="bc-toolbar__label" style="margin-left:auto;font-size:9pt;">
-      Beispieldaten: <code>data/sample.json</code>
-    </span>
+    <button class="bc-btn--schema" id="btn-schema" title="Kontenschema aus Business Central laden">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm8 0A1.5 1.5 0 0 1 10.5 9h3A1.5 1.5 0 0 1 15 10.5v3A1.5 1.5 0 0 1 13.5 15h-3A1.5 1.5 0 0 1 9 13.5z"/></svg>
+      Kontenschema
+      <span class="bc-schema-name" id="schema-name-badge"></span>
+    </button>
+    <span class="bc-toolbar__label" style="margin-left:auto;font-size:9pt;">Beispieldaten: <code>data/sample.json</code></span>
   </div>
-
   <div class="bc-toolbar--anim">
     <span class="bc-toolbar__label">Intervall:</span>
     <button class="bc-btn--toggle active" id="btn-month">Monat</button>
-    <button class="bc-btn--toggle"        id="btn-quarter">Quartal</button>
-    <button class="bc-btn--toggle"        id="btn-year">Jahr</button>
+    <button class="bc-btn--toggle" id="btn-quarter">Quartal</button>
+    <button class="bc-btn--toggle" id="btn-year">Jahr</button>
     <div class="bc-toolbar__sep"></div>
     <span class="bc-toolbar__label">Von:</span>
     <select class="bc-select" id="sel-from"></select>
@@ -72,36 +76,20 @@
     <select class="bc-select" id="sel-to"></select>
     <div class="bc-toolbar__sep"></div>
     <button class="bc-btn--play" id="btn-play">&#9654; Start</button>
-    <span class="bc-period-badge" id="current-period">—</span>
+    <span class="bc-period-badge" id="current-period">&mdash;</span>
   </div>
-
   <div class="bc-kpi-row">
-    <div class="bc-kpi" id="kpi-revenue">
-      <div class="bc-kpi__label">Gesamtumsatz</div>
-      <div class="bc-kpi__value">—</div>
-      <div class="bc-kpi__sub">Lade Daten…</div>
-    </div>
-    <div class="bc-kpi" id="kpi-costs">
-      <div class="bc-kpi__label">Gesamtkosten</div>
-      <div class="bc-kpi__value">—</div>
-      <div class="bc-kpi__sub">&nbsp;</div>
-    </div>
-    <div class="bc-kpi bc-kpi--favorable" id="kpi-ebit">
-      <div class="bc-kpi__label">EBIT</div>
-      <div class="bc-kpi__value">—</div>
-      <div class="bc-kpi__sub">&nbsp;</div>
-    </div>
+    <div class="bc-kpi" id="kpi-revenue"><div class="bc-kpi__label">Gesamtumsatz</div><div class="bc-kpi__value">&mdash;</div><div class="bc-kpi__sub">Lade Daten&hellip;</div></div>
+    <div class="bc-kpi" id="kpi-costs"><div class="bc-kpi__label">Gesamtkosten</div><div class="bc-kpi__value">&mdash;</div><div class="bc-kpi__sub">&nbsp;</div></div>
+    <div class="bc-kpi bc-kpi--favorable" id="kpi-ebit"><div class="bc-kpi__label">EBIT</div><div class="bc-kpi__value">&mdash;</div><div class="bc-kpi__sub">&nbsp;</div></div>
   </div>
-
   <div class="bc-card">
     <div class="bc-card__header">
       <span class="bc-card__title" id="diagram-title">Sankey P&amp;L</span>
-      <span style="font-size:9pt;color:#A7ADB6;">Bewege die Maus über Knoten und Flüsse für Details</span>
+      <span style="font-size:9pt;color:#A7ADB6;">Maus &uuml;ber Knoten und Fl&uuml;sse f&uuml;r Details</span>
     </div>
     <div id="sankey-container"></div>
-    <div id="drop-zone" class="bc-upload" style="margin-top:0.75rem;display:none;">
-      JSON-Datei hier ablegen oder <strong>JSON laden</strong> klicken
-    </div>
+    <div id="drop-zone" class="bc-upload" style="margin-top:0.75rem;display:none;">JSON-Datei hier ablegen oder <strong>JSON laden</strong> klicken</div>
     <div class="bc-legend">
       <div class="bc-legend__item"><div class="bc-legend__swatch" style="background:#75B5E7;"></div>Umsatz (Ebene 2)</div>
       <div class="bc-legend__item"><div class="bc-legend__swatch" style="background:#378ADD;"></div>Umsatz (Ebene 1)</div>
@@ -111,9 +99,25 @@
       <div class="bc-legend__item"><div class="bc-legend__swatch" style="background:#35AB22;"></div>Ergebnis (EBIT)</div>
     </div>
   </div>
-
 </div>
 <div class="bc-tooltip" id="bc-tooltip"></div>
 <script src="js/bc-sankey.js"></script>
+<script type="module">
+  import { initAuth, signIn, signOut, isSignedIn, getAccount, onAuthChange } from './js/bc-auth.js';
+  import { loadSettings, openSettings } from './js/bc-settings.js';
+  import { buildODataCompanyUrl, buildAccScheduleLinesUrl, bcGet, parseAccScheduleLines, filterSankeyRelevantLines, convertScheduleToSankey } from './js/bc-api.js';
+  window.bcAuth = { isSignedIn, getAccount };
+  const loginBanner=document.getElementById('login-banner'), accountBadge=document.getElementById('account-badge'), accountName=document.getElementById('account-name'), accountAvatar=document.getElementById('account-avatar'), schemaBtn=document.getElementById('btn-schema'), schemaBadge=document.getElementById('schema-name-badge');
+  function updateAuthUI(a){if(a){accountBadge.style.display='flex';accountName.textContent=a.name||a.email;accountAvatar.textContent=(a.name||'?')[0].toUpperCase();loginBanner.style.display='none';}else{accountBadge.style.display='none';const s=loadSettings();loginBanner.style.display=(s.clientId&&s.tenantId&&s.dataSource==='bc')?'flex':'none';}}
+  function updateSchemaBtn(){const s=loadSettings();if(s.accountScheduleName&&s.accountScheduleName.trim()){schemaBtn.classList.add('visible');schemaBadge.textContent=s.accountScheduleName.trim();}else{schemaBtn.classList.remove('visible');schemaBadge.textContent='';}}
+  function init(){const s=loadSettings();if(s.clientId&&s.tenantId)initAuth(s.clientId,s.tenantId);onAuthChange(updateAuthUI);updateAuthUI(getAccount());updateSchemaBtn();}
+  document.getElementById('btn-settings').addEventListener('click',openSettings);
+  document.getElementById('btn-login').addEventListener('click',async()=>{try{const a=await signIn();if(a)updateAuthUI(a);}catch(e){alert('Anmeldung fehlgeschlagen: '+e.message);}});
+  accountBadge.addEventListener('click',async()=>{if(confirm('Abmelden?')){await signOut();updateAuthUI(null);}});
+  schemaBtn.addEventListener('click',async()=>{const s=loadSettings();if(!s.accountScheduleName){alert('Kein Kontenschema konfiguriert.');return;}if(!s.tenantId||!s.companyId){alert('Bitte Tenant und Mandant konfigurieren.');return;}schemaBtn.disabled=true;schemaBtn.querySelector('.bc-schema-name').textContent='Lädt...';try{const u=buildODataCompanyUrl(s.tenantId,s.environment||'production',s.companyId),l=buildAccScheduleLinesUrl(u,s.accountScheduleName),r=await bcGet(l,null),lines=parseAccScheduleLines(r),f=filterSankeyRelevantLines(lines),d=convertScheduleToSankey(f,s.accountScheduleName);if(d&&window.bcSankey){if(d._warning)alert('Hinweis: '+d._warning);window.bcSankey.load(d);}else{alert('Keine Daten erhalten.');}}catch(e){alert('Fehler: '+e.message+(e.statusCode===404?'\n\nTipp: Page 104 als OData-Webservice in BC veröffentlichen.':''));}finally{schemaBtn.disabled=false;schemaBadge.textContent=loadSettings().accountScheduleName||'';}});
+  document.addEventListener('bc-settings-saved',(e)=>{const s=e.detail;if(s.clientId&&s.tenantId)initAuth(s.clientId,s.tenantId);updateAuthUI(getAccount());updateSchemaBtn();});
+  document.addEventListener('bc-local-file-selected',(e)=>{if(window.bcSankey)window.bcSankey.loadFile(e.detail);});
+  init();
+</script>
 </body>
 </html>
