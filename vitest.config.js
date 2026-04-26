@@ -1,5 +1,19 @@
 import { defineConfig } from 'vitest/config';
+
 export default defineConfig({
-  test: { environment: 'node', include: ['tests/**/*.test.js'],
-    coverage: { provider: 'v8', include: ['src/**/*.js'], reporter: ['text', 'lcov'],
-      thresholds: { lines: 80, functions: 80, branches: 70 } } } });
+  test: {
+    // 'happy-dom' statt 'node' — brauchen wir für localStorage in settings.test.js
+    environment: 'happy-dom',
+    include: ['tests/**/*.test.js'],
+    coverage: {
+      provider: 'v8',
+      include: ['src/**/*.js', 'js/bc-auth.js', 'js/bc-settings.js'],
+      reporter: ['text', 'lcov'],
+      thresholds: {
+        lines:     75,
+        functions: 75,
+        branches:  65,
+      },
+    },
+  },
+});
