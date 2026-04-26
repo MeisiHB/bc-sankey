@@ -1,0 +1,410 @@
+/*
+ * bc-settings.css
+ * Styles for Login banner, Settings modal, and Connection tab
+ * Follows Business Central design language (bc-sankey.css tokens)
+ */
+
+/* ── Login Banner ─────────────────────────────────────────────────────────── */
+
+.bc-login-banner {
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-left: 4px solid var(--bc-primary);
+  border-radius: var(--bc-radius);
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.bc-login-banner__text {
+  flex: 1;
+  font-size: var(--bc-size-sm);
+  color: var(--bc-secondary);
+}
+
+.bc-login-banner__text strong {
+  display: block;
+  font-family: var(--bc-font-bold);
+  color: var(--bc-text);
+  margin-bottom: 2px;
+  font-weight: normal;
+}
+
+.bc-btn--ms {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--bc-font);
+  font-size: var(--bc-size-sm);
+  padding: 0.4rem 1rem;
+  border-radius: var(--bc-radius);
+  border: 1px solid #8C8C8C;
+  background: #fff;
+  color: #1a1a1a;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.bc-btn--ms:hover {
+  background: #F5F5F5;
+  border-color: #555;
+}
+
+.bc-btn--ms svg {
+  flex-shrink: 0;
+}
+
+/* ── Account badge (in header) ────────────────────────────────────────────── */
+
+.bc-account-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--bc-size-xs);
+  color: var(--bc-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--bc-radius);
+  border: 1px solid #E0E0E0;
+  background: #F8F8F8;
+  transition: background 0.15s;
+}
+
+.bc-account-badge:hover { background: #EFEFEF; }
+
+.bc-account-badge__avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--bc-primary);
+  color: #fff;
+  font-size: 11px;
+  font-family: var(--bc-font-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bc-account-badge__name {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Gear button (in header) ──────────────────────────────────────────────── */
+
+.bc-btn--gear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--bc-radius);
+  border: 1px solid #E0E0E0;
+  background: #fff;
+  color: var(--bc-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.bc-btn--gear:hover {
+  background: var(--bc-secondary);
+  color: #fff;
+}
+
+/* ── Modal overlay ────────────────────────────────────────────────────────── */
+
+.bc-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.bc-modal-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Modal ────────────────────────────────────────────────────────────────── */
+
+.bc-modal {
+  background: #fff;
+  border-radius: var(--bc-radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
+  width: min(560px, calc(100vw - 2rem));
+  max-height: calc(100vh - 4rem);
+  display: flex;
+  flex-direction: column;
+  animation: bc-modal-in 0.18s ease;
+  overflow: hidden;
+}
+
+@keyframes bc-modal-in {
+  from { transform: translateY(-12px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+.bc-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem 0.75rem;
+  border-bottom: 1px solid #F0F0F0;
+  flex-shrink: 0;
+}
+
+.bc-modal__title {
+  font-family: var(--bc-font-semi);
+  font-size: var(--bc-size-md);
+  color: var(--bc-secondary);
+  display: flex;
+  align-items: center;
+}
+
+.bc-modal__close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--bc-text-muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 4px;
+  border-radius: var(--bc-radius);
+  transition: background 0.15s, color 0.15s;
+}
+
+.bc-modal__close:hover {
+  background: #F0F0F0;
+  color: var(--bc-text);
+}
+
+/* ── Tabs ─────────────────────────────────────────────────────────────────── */
+
+.bc-modal__tabs {
+  display: flex;
+  border-bottom: 1px solid #E8E8E8;
+  padding: 0 1.25rem;
+  flex-shrink: 0;
+}
+
+.bc-tab {
+  font-family: var(--bc-font);
+  font-size: var(--bc-size-sm);
+  color: var(--bc-text-muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: -1px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.bc-tab:hover { color: var(--bc-secondary); }
+
+.bc-tab.active {
+  color: var(--bc-primary);
+  border-bottom-color: var(--bc-primary);
+  font-family: var(--bc-font-semi);
+}
+
+/* ── Tab panels ───────────────────────────────────────────────────────────── */
+
+.bc-tab-panel {
+  display: none;
+  padding: 1.25rem 1.25rem 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.bc-tab-panel.active {
+  display: block;
+}
+
+/* ── Form fields ──────────────────────────────────────────────────────────── */
+
+.bc-settings-hint {
+  font-size: var(--bc-size-sm);
+  color: var(--bc-text-muted);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.bc-settings-hint a {
+  color: var(--bc-primary);
+  text-decoration: none;
+}
+
+.bc-settings-hint a:hover { text-decoration: underline; }
+
+.bc-settings-hint code {
+  background: #F5F5F5;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.9em;
+  color: var(--bc-secondary);
+}
+
+.bc-field-group {
+  margin-bottom: 1rem;
+}
+
+.bc-field-label {
+  display: block;
+  font-size: var(--bc-size-xs);
+  font-family: var(--bc-font-semi);
+  color: var(--bc-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+
+.bc-field-input {
+  width: 100%;
+  font-family: var(--bc-font);
+  font-size: var(--bc-size-sm);
+  color: var(--bc-text);
+  border: 1px solid #C8C8C8;
+  border-radius: var(--bc-radius);
+  padding: 0.45rem 0.65rem;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.bc-field-input:focus { border-color: var(--bc-primary); }
+.bc-field-input.error { border-color: var(--bc-unfavorable); }
+
+.bc-field-error {
+  display: block;
+  font-size: var(--bc-size-xs);
+  color: var(--bc-unfavorable);
+  margin-top: 3px;
+  min-height: 1.2em;
+}
+
+.bc-field-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--bc-size-sm);
+  color: var(--bc-secondary);
+  cursor: pointer;
+}
+
+.bc-field-check input[type="radio"] {
+  accent-color: var(--bc-primary);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ── Upload zone (Settings modal) ─────────────────────────────────────────── */
+
+.bc-upload-zone {
+  border: 2px dashed #D0D0D0;
+  border-radius: var(--bc-radius);
+  padding: 1.75rem 1rem;
+  text-align: center;
+  color: var(--bc-text-muted);
+  font-size: var(--bc-size-sm);
+  transition: border-color 0.2s, background 0.2s;
+  cursor: default;
+}
+
+.bc-upload-zone p { margin: 0.5rem 0; }
+
+.bc-upload-zone svg { color: #C0C0C0; margin-bottom: 0.25rem; }
+
+.bc-upload-zone.dragover {
+  border-color: var(--bc-primary);
+  background: rgba(0, 183, 195, 0.04);
+}
+
+.bc-loaded-file {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--bc-size-sm);
+  color: var(--bc-favorable);
+  margin-top: 0.75rem;
+  padding: 0.4rem 0.65rem;
+  background: rgba(53, 171, 34, 0.07);
+  border-radius: var(--bc-radius);
+}
+
+/* ── Connection status ────────────────────────────────────────────────────── */
+
+.bc-connection-status {
+  background: #F8F8F8;
+  border-radius: var(--bc-radius);
+  padding: 0.85rem 1rem;
+  border: 1px solid #E8E8E8;
+}
+
+.bc-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bc-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #C8C8C8;
+  flex-shrink: 0;
+}
+
+.bc-status-dot.connected { background: var(--bc-favorable); }
+.bc-status-dot.error     { background: var(--bc-unfavorable); }
+
+.bc-status-label {
+  font-family: var(--bc-font-semi);
+  font-size: var(--bc-size-sm);
+  color: var(--bc-secondary);
+}
+
+.bc-status-detail {
+  font-size: var(--bc-size-xs);
+  color: var(--bc-text-muted);
+  margin-top: 3px;
+  padding-left: 18px;
+}
+
+.bc-url-preview {
+  font-family: monospace;
+  font-size: var(--bc-size-xs);
+  background: #F5F5F5;
+  border: 1px solid #E0E0E0;
+  border-radius: var(--bc-radius);
+  padding: 0.5rem 0.65rem;
+  color: var(--bc-secondary);
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+/* ── Modal footer ─────────────────────────────────────────────────────────── */
+
+.bc-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.9rem 1.25rem;
+  border-top: 1px solid #F0F0F0;
+  flex-shrink: 0;
+}
