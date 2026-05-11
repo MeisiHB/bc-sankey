@@ -319,16 +319,23 @@ export function guessNodeGroup(line, index, allLines) {
   const pos   = total > 0 ? index / total : 0;
   const desc  = (line.description || '').toLowerCase();
 
-  if (desc.includes('umsatz') || desc.includes('erlös') || desc.includes('revenue')) {
+  const isCost    = desc.includes('personal') || desc.includes('material') || desc.includes('kosten') || desc.includes('aufwand');
+  const isRevenue = desc.includes('umsatz') || desc.includes('erlös') || desc.includes('revenue');
+  const isTotal   = desc.includes('gesamt') || desc.includes('total');
+
+  if (isTotal && isCost) {
+    return pos > 0.6 ? 'cost-1' : 'cost-2';
+  }
+  if (isTotal) {
+    return 'total';
+  }
+  if (isRevenue) {
     return pos < 0.3 ? 'revenue-1' : 'revenue-2';
   }
   if (desc.includes('ergebnis') || desc.includes('gewinn') || desc.includes('ebit') || desc.includes('result')) {
     return 'result';
   }
-  if (desc.includes('gesamt') || desc.includes('total')) {
-    return 'total';
-  }
-  if (desc.includes('personal') || desc.includes('material') || desc.includes('kosten') || desc.includes('aufwand')) {
+  if (isCost) {
     return pos > 0.6 ? 'cost-1' : 'cost-2';
   }
 
