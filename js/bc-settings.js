@@ -37,6 +37,7 @@ export const DEFAULT_SETTINGS = {
   // UI
   animStepDelay: 600,
   animTransitionMs: 900,
+  nodeGap: 12,
 };
 
 // ── Settings CRUD ──────────────────────────────────────────────────────────
@@ -206,6 +207,7 @@ function _buildModal() {
     <button class="bc-tab active" data-tab="bc">Business Central</button>
     <button class="bc-tab"        data-tab="local">Lokale Daten</button>
     <button class="bc-tab"        data-tab="connection">Verbindung</button>
+    <button class="bc-tab"        data-tab="format">Formatierung</button>
   </div>
 
   <!-- Tab: BC -->
@@ -301,6 +303,22 @@ function _buildModal() {
     </div>
   </div>
 
+  <!-- Tab: Formatierung -->
+  <div class="bc-tab-panel" id="tab-panel-format">
+    <p class="bc-settings-hint">
+      Passe das visuelle Layout des Sankey-Diagramms an.
+    </p>
+    <div class="bc-field-group">
+      <label class="bc-field-label">Vertikaler Abstand zwischen Blöcken</label>
+      <div class="bc-gap-slider-wrap">
+        <input type="range" id="set-gap-step" class="bc-gap-slider" min="0" max="3" step="1" value="1" />
+        <div class="bc-gap-labels">
+          <span>Eng</span><span>Normal</span><span>Weit</span><span>Sehr weit</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="bc-modal__footer">
     <button class="bc-btn" id="btn-settings-cancel">Abbrechen</button>
     <button class="bc-btn bc-btn--primary" id="btn-settings-save">Speichern</button>
@@ -364,6 +382,10 @@ function _populateModal() {
   const radio = document.querySelector(`input[name="datasource"][value="${s.dataSource}"]`);
   if (radio) radio.checked = true;
 
+  const GAP_VALUES = [6, 12, 22, 36];
+  const gapStep = GAP_VALUES.indexOf(s.nodeGap ?? 12);
+  _setVal('set-gap-step', gapStep < 0 ? 1 : gapStep);
+
   const fileDisplay = document.getElementById('settings-loaded-file');
   const fileName    = document.getElementById('settings-file-name');
   if (s.localFilePath) {
@@ -408,6 +430,8 @@ function _onSave() {
   _clearErrors();
   const s = loadSettings();
 
+  const GAP_VALUES = [6, 12, 22, 36];
+  const gapStep = parseInt(_getVal('set-gap-step') || '1', 10);
   const newSettings = {
     ...s,
     clientId:            _getVal('set-client-id'),
@@ -416,6 +440,7 @@ function _onSave() {
     environment:         _getVal('set-environment') || 'production',
     accountScheduleName: _getVal('set-account-schedule'),
     dataSource:          document.querySelector('input[name="datasource"]:checked')?.value || 'local',
+    nodeGap:             GAP_VALUES[gapStep] ?? 12,
   };
 
   const { valid, errors } = validateSettings(newSettings);

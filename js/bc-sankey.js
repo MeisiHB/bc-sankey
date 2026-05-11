@@ -96,14 +96,13 @@ class BCSankey {
   _bindControls() {
     document.querySelectorAll('[data-interval]').forEach(btn => {
       btn.addEventListener('click', ()=>{
-        document.querySelectorAll('[data-interval]').forEach(b=>b.classList.remove('bc-btn--active'));
-        btn.classList.add('bc-btn--active');
+        document.querySelectorAll('[data-interval]').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
         this._setInterval(btn.dataset.interval);
       });
     });
-    const pb=document.getElementById('btn-play'), sb=document.getElementById('btn-stop');
-    if(pb) pb.addEventListener('click',()=>this.play());
-    if(sb) sb.addEventListener('click',()=>this.stop());
+    const pb=document.getElementById('btn-play');
+    if(pb) pb.addEventListener('click',()=>{ if(this.animTimer) this.pause(); else this.play(); });
   }
 
   _aggregateLinks(indices) {
@@ -118,7 +117,7 @@ class BCSankey {
     this.currentIdx = idx;
     const period = this.periods[idx]; if(!period) return;
     const links = this._aggregateLinks(period.indices);
-    const disp  = document.getElementById('anim-period');
+    const disp  = document.getElementById('current-period');
     if(disp) disp.textContent = period.label;
     const fs = document.getElementById('sel-from');
     if(fs && !this.animTimer) fs.value = idx;
@@ -130,32 +129,64 @@ class BCSankey {
   }
 
   _crossfade(links, title) {
-    if(this._fading) return;
-    const c=document.getElementById(this.containerId); if(!c) return;
-    this._fading=true;
-    c.style.transition='opacity 200ms ease'; c.style.opacity='0';
-    setTimeout(()=>{ this._render(links,title); c.style.opacity='1'; setTimeout(()=>{ this._fading=false; },220); },210);
+    this._render(links, title);
   }
 
   play() {
     if(this.animTimer) return;
     const fs=document.getElementById('sel-from'), ts=document.getElementById('sel-to');
     const start=fs?parseInt(fs.value):0, end=ts?parseInt(ts.value):this.periods.length-1;
-    const pb=document.getElementById('btn-play'), sb=document.getElementById('btn-stop');
-    if(pb) pb.disabled=true; if(sb) sb.disabled=false;
-    if(this.currentIdx<start||this.currentIdx>=end) this._gotoIdx(start,false);
+    const pb=document.getElementById('btn-play');
+    if(this.currentIdx>=end) this._gotoIdx(start,false);
     this.animTimer=setInterval(()=>{
       const ts2=document.getElementById('sel-to'), endNow=ts2?parseInt(ts2.value):end;
       const next=this.currentIdx+1;
       if(next>endNow){ this.stop(); return; }
       this._gotoIdx(next,true);
     }, this.animSpeed);
+    if(pb){ pb.innerHTML='&#x23F8; Pause'; pb.classList.add('bc-btn--paused'); }
+  }
+
+  pause() {
+    if(this.animTimer){ clearInterval(this.animTimer); this.animTimer=null; }
+    const pb=document.getElementById('btn-play');
+    if(pb){ pb.innerHTML='&#9654; Weiter'; pb.classList.remove('bc-btn--paused'); }
   }
 
   stop() {
     if(this.animTimer){ clearInterval(this.animTimer); this.animTimer=null; }
-    const pb=document.getElementById('btn-play'), sb=document.getElementById('btn-stop');
-    if(pb) pb.disabled=false; if(sb) sb.disabled=true;
+    const pb=document.getElementById('btn-play');
+    if(pb){ pb.innerHTML='&#9654; Start'; pb.classList.remove('bc-btn--paused'); }
+  }
+
+  _exportSVG() {
+    const svg=document.getElementById('sankey-svg'); if(!svg) return;
+    const title=(document.getElementById('diagram-title')?.textContent||'sankey').replace(/[^\w\-]/g,'_');
+    const xml=new XMLSerializer().serializeToString(svg);
+    const blob=new Blob(['<?xml version="1.0" encoding="UTF-8"?>'+xml],{type:'image/svg+xml'});
+    const a=Object.assign(document.createElement('a'),{href:URL.createObjectURL(blob),download:title+'.svg'});
+    a.click(); URL.revokeObjectURL(a.href);
+  }
+
+  _exportJPG() {
+    const svg=document.getElementById('sankey-svg'); if(!svg) return;
+    const title=(document.getElementById('diagram-title')?.textContent||'sankey').replace(/[^\w\-]/g,'_');
+    const vb=svg.viewBox.baseVal;
+    const W=vb.width||960, H=vb.height||560;
+    const xml=new XMLSerializer().serializeToString(svg);
+    const blob=new Blob([xml],{type:'image/svg+xml'});
+    const url=URL.createObjectURL(blob);
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=Object.assign(document.createElement('canvas'),{width:W*2,height:H*2});
+      const ctx=canvas.getContext('2d');
+      ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      URL.revokeObjectURL(url);
+      const a=Object.assign(document.createElement('a'),{href:canvas.toDataURL('image/jpeg',0.93),download:title+'.jpg'});
+      a.click();
+    };
+    img.src=url;
   }
 
   _updateKPIs(links, d, periodTitle) {
@@ -176,9 +207,8 @@ class BCSankey {
     if(t) t.textContent=(d.title||'P&L')+'\u00A0\u2014\u00A0'+periodTitle;
   }
 
-  _render(links, title) {
-    const container=document.getElementById(this.containerId); if(!container) return;
-    container.innerHTML='';
+  _computeLayout(links) {
+    const container=document.getElementById(this.containerId);
     const d=this.multiData;
     const W=container.clientWidth||960, H=Math.max(440,Math.min(W*0.58,620));
     const nw=114,nr=5,ovlap=nr+2,pad=10,mt=24,mb=24,iH=H-mt-mb,numCols=5;
@@ -189,7 +219,9 @@ class BCSankey {
     links.forEach(l=>{ if(nodeMap[l.source]) nodeMap[l.source].outValue+=l.value; if(nodeMap[l.target]) nodeMap[l.target].inValue+=l.value; });
     Object.values(nodeMap).forEach(n=>{ n.value=Math.max(n.inValue,n.outValue); if(n.group==='result'&&n.value<0) n.color=GROUP_COLORS_UNFAV['result']; });
 
-    const maxVal=Math.max(...Object.values(nodeMap).map(n=>n.value)), scale=v=>(v/maxVal)*iH*0.82, minH=26, nodeGap=12;
+    const maxVal=Math.max(...Object.values(nodeMap).map(n=>n.value)), scale=v=>(v/maxVal)*iH*0.82, minH=26;
+    const _cfg=JSON.parse(localStorage.getItem('bc-sankey-settings')||'{}');
+    const nodeGap=_cfg.nodeGap??12;
     const colGroups={};
     Object.values(nodeMap).forEach(n=>{ if(!colGroups[n.col]) colGroups[n.col]=[]; colGroups[n.col].push(n); });
     Object.entries(colGroups).forEach(([col,nodes])=>{
@@ -198,46 +230,97 @@ class BCSankey {
       nodes.forEach(n=>{ const h=Math.max(scale(n.value),minH); n.x=colX(parseInt(col))-nw/2; n.y=y; n.h=h; n.cx=colX(parseInt(col)); n.cy=y+h/2; y+=h+nodeGap; });
     });
 
-    const svg=d3.select('#'+this.containerId).append('svg').attr('id','sankey-svg').attr('viewBox','0 0 '+W+' '+H).attr('width','100%');
-    const defs=svg.append('defs');
-    const filt=defs.append('filter').attr('id','rshadow').attr('x','-5%').attr('y','-5%').attr('width','110%').attr('height','110%');
-    filt.append('feDropShadow').attr('dx','0').attr('dy','1').attr('stdDeviation','2').attr('flood-color','rgba(0,0,0,0.16)');
-
-    const tooltip=this.tooltip;
-
-    links.forEach((lk,i)=>{
-      const s=nodeMap[lk.source],t=nodeMap[lk.target]; if(!s||!t) return;
+    Object.values(nodeMap).forEach(n=>{ n.inOffset=0; n.outOffset=0; });
+    const linkGeom=links.map((lk,i)=>{
+      const s=nodeMap[lk.source],t=nodeMap[lk.target]; if(!s||!t) return null;
       const lh=Math.max(scale(lk.value),2);
       const sy0=s.y+s.outOffset,sy1=sy0+lh,ty0=t.y+t.inOffset,ty1=ty0+lh;
       s.outOffset+=lh; t.inOffset+=lh;
       const x1=s.cx+nw/2-ovlap, x2=t.cx-nw/2+ovlap, cp=(x1+x2)/2;
       const path='M'+x1+','+sy0+' C'+cp+','+sy0+' '+cp+','+ty0+' '+x2+','+ty0+' L'+x2+','+ty1+' C'+cp+','+ty1+' '+cp+','+sy1+' '+x1+','+sy1+' Z';
-      const gid='g'+i,hid='h'+i;
+      return {lk,s,t,lh,path};
+    });
+
+    return {nodeMap,linkGeom,W,H,nw,nr};
+  }
+
+  _render(links, title) {
+    this._links=links;
+    const layout=this._computeLayout(links);
+    this._nodeMap=layout.nodeMap;
+    if(document.getElementById('sankey-svg')) {
+      this._morphTo(layout);
+    } else {
+      this._buildSVG(layout);
+    }
+  }
+
+  _buildSVG({nodeMap,linkGeom,W,H,nw,nr}) {
+    const container=document.getElementById(this.containerId); if(!container) return;
+    container.innerHTML='';
+    const d=this.multiData, tooltip=this.tooltip;
+    const svg=d3.select('#'+this.containerId).append('svg').attr('id','sankey-svg').attr('viewBox','0 0 '+W+' '+H).attr('width','100%');
+    const defs=svg.append('defs');
+    const filt=defs.append('filter').attr('id','rshadow').attr('x','-5%').attr('y','-5%').attr('width','110%').attr('height','110%');
+    filt.append('feDropShadow').attr('dx','0').attr('dy','1').attr('stdDeviation','2').attr('flood-color','rgba(0,0,0,0.16)');
+
+    linkGeom.forEach((lg,i)=>{
+      if(!lg) return;
+      const {s,t,path}=lg;
+      const gid='lkg'+i, hid='lkh'+i;
       const gr=defs.append('linearGradient').attr('id',gid).attr('x1','0%').attr('x2','100%');
       gr.append('stop').attr('offset','0%').attr('stop-color',s.color).attr('stop-opacity',0.72);
       gr.append('stop').attr('offset','50%').attr('stop-color',mixColors(s.color,t.color)).attr('stop-opacity',0.58);
       gr.append('stop').attr('offset','100%').attr('stop-color',t.color).attr('stop-opacity',0.72);
       const hg=defs.append('linearGradient').attr('id',hid).attr('x1','0%').attr('x2','0%').attr('y1','0%').attr('y2','100%');
       hg.append('stop').attr('offset','0%').attr('stop-color','#fff').attr('stop-opacity',0.22);
-      hg.append('stop').attr('offset','45%').attr('stop-color','#fff').attr('stop-opacity',0.0);
+      hg.append('stop').attr('offset','45%').attr('stop-color','#fff').attr('stop-opacity',0);
       hg.append('stop').attr('offset','100%').attr('stop-color','#000').attr('stop-opacity',0.11);
-      const ribbon=svg.append('path').attr('d',path).attr('fill','url(#'+gid+')').attr('stroke','none').style('filter','url(#rshadow)');
-      svg.append('path').attr('d',path).attr('fill','url(#'+hid+')').attr('stroke','none').style('pointer-events','none');
-      ribbon.on('mouseenter',function(ev){ d3.select(this).style('filter','none'); tooltip.innerHTML='<div class="bc-tooltip__title">'+s.label+' \u2192 '+t.label+'</div>'+fmt(lk.value,d.unit_label); tooltip.classList.add('visible'); })
+      const g=svg.append('g').attr('class','sk-link').attr('data-li',i);
+      const ribbon=g.append('path').attr('class','sk-ribbon').attr('d',path).attr('fill','url(#'+gid+')').attr('stroke','none').style('filter','url(#rshadow)');
+      g.append('path').attr('class','sk-shine').attr('d',path).attr('fill','url(#'+hid+')').attr('stroke','none').style('pointer-events','none');
+      ribbon.on('mouseenter',ev=>{ d3.select(ev.currentTarget).style('filter','none'); const lk=this._links[i]; tooltip.innerHTML='<div class="bc-tooltip__title">'+s.label+' \u2192 '+t.label+'</div>'+fmt(lk.value,d.unit_label); tooltip.classList.add('visible'); })
             .on('mousemove',ev=>{ tooltip.style.left=(ev.clientX+14)+'px'; tooltip.style.top=(ev.clientY-10)+'px'; })
-            .on('mouseleave',function(){ d3.select(this).style('filter','url(#rshadow)'); tooltip.classList.remove('visible'); });
+            .on('mouseleave',ev=>{ d3.select(ev.currentTarget).style('filter','url(#rshadow)'); tooltip.classList.remove('visible'); });
     });
 
-    Object.values(nodeMap).forEach(n=>{
-      const g=svg.append('g').style('cursor','pointer');
-      g.append('rect').attr('x',n.x).attr('y',n.y).attr('width',nw).attr('height',n.h).attr('rx',nr).attr('fill',n.color).attr('opacity',0.95);
-      g.append('rect').attr('x',n.x).attr('y',n.y).attr('width',nw).attr('height',Math.min(5,n.h)).attr('rx',nr).attr('fill','rgba(255,255,255,0.28)').style('pointer-events','none');
-      const mx=n.cx,my=n.y+n.h/2,fs=n.h<40?9:11,lbl=n.label.length>14?n.label.slice(0,13)+'\u2026':n.label;
-      if(n.h>=26) g.append('text').attr('x',mx).attr('y',n.h>=42?my-7:my+4).attr('text-anchor','middle').attr('font-size',fs+'px').attr('font-weight','600').attr('font-family','"Segoe UI",Tahoma,sans-serif').attr('fill','#fff').text(lbl);
-      if(n.h>=42) g.append('text').attr('x',mx).attr('y',my+9).attr('text-anchor','middle').attr('font-size','9px').attr('font-family','"Segoe UI",Tahoma,sans-serif').attr('fill','rgba(255,255,255,0.88)').text(fmt(n.value,d.unit_label));
-      g.on('mouseenter',function(ev){ const tn2=Object.values(nodeMap).find(x=>x.group==='total'); const pct=tn2&&tn2.value?' ('+(n.value/tn2.value*100).toFixed(1).replace('.',',')+'\u00A0%)':''; tooltip.innerHTML='<div class="bc-tooltip__title">'+n.label+'</div>'+fmt(n.value,d.unit_label)+pct; tooltip.classList.add('visible'); })
+    Object.entries(nodeMap).forEach(([id,n])=>{
+      const g=svg.append('g').attr('class','sk-node').attr('data-nid',id).style('cursor','pointer');
+      const lbl=n.label.length>14?n.label.slice(0,13)+'\u2026':n.label;
+      g.append('rect').attr('class','sk-node-rect').attr('x',n.x).attr('y',n.y).attr('width',nw).attr('height',n.h).attr('rx',nr).attr('fill',n.color).attr('opacity',0.95);
+      g.append('rect').attr('class','sk-node-shine').attr('x',n.x).attr('y',n.y).attr('width',nw).attr('height',Math.min(5,n.h)).attr('rx',nr).attr('fill','rgba(255,255,255,0.28)').style('pointer-events','none');
+      g.append('text').attr('class','sk-node-label').attr('x',n.cx).attr('y',n.h>=42?n.cy-7:n.cy+4).attr('text-anchor','middle').attr('font-size',(n.h<40?9:11)+'px').attr('font-weight','600').attr('font-family','"Segoe UI",Tahoma,sans-serif').attr('fill','#fff').attr('opacity',n.h>=26?1:0).text(lbl);
+      g.append('text').attr('class','sk-node-value').attr('x',n.cx).attr('y',n.cy+9).attr('text-anchor','middle').attr('font-size','9px').attr('font-family','"Segoe UI",Tahoma,sans-serif').attr('fill','rgba(255,255,255,0.88)').attr('opacity',n.h>=42?1:0).text(fmt(n.value,d.unit_label));
+      g.on('mouseenter',ev=>{ const cur=this._nodeMap[id]; const tn2=Object.values(this._nodeMap).find(x=>x.group==='total'); const pct=tn2&&tn2.value?' ('+(cur.value/tn2.value*100).toFixed(1).replace('.',',')+'\u00A0%)':''; tooltip.innerHTML='<div class="bc-tooltip__title">'+cur.label+'</div>'+fmt(cur.value,d.unit_label)+pct; tooltip.classList.add('visible'); })
         .on('mousemove',ev=>{ tooltip.style.left=(ev.clientX+14)+'px'; tooltip.style.top=(ev.clientY-10)+'px'; })
         .on('mouseleave',()=>tooltip.classList.remove('visible'));
+    });
+  }
+
+  _morphTo({nodeMap,linkGeom},dur=600) {
+    const d=this.multiData;
+    const svg=d3.select('#sankey-svg');
+    const tr=svg.transition().duration(dur);
+
+    linkGeom.forEach((lg,i)=>{
+      if(!lg) return;
+      const g=svg.select('.sk-link[data-li="'+i+'"]');
+      g.select('.sk-ribbon').transition(tr).attr('d',lg.path);
+      g.select('.sk-shine').transition(tr).attr('d',lg.path);
+      const stops=d3.selectAll('#lkg'+i+' stop');
+      stops.filter((_,j)=>j===0).attr('stop-color',lg.s.color);
+      stops.filter((_,j)=>j===1).attr('stop-color',mixColors(lg.s.color,lg.t.color));
+      stops.filter((_,j)=>j===2).attr('stop-color',lg.t.color);
+    });
+
+    Object.entries(nodeMap).forEach(([id,n])=>{
+      const g=svg.select('.sk-node[data-nid="'+id+'"]');
+      const fs=n.h<40?9:11;
+      g.select('.sk-node-rect').transition(tr).attr('y',n.y).attr('height',n.h).attr('fill',n.color);
+      g.select('.sk-node-shine').transition(tr).attr('y',n.y).attr('height',Math.min(5,n.h));
+      g.select('.sk-node-label').transition(tr).attr('y',n.h>=42?n.cy-7:n.cy+4).attr('font-size',fs+'px').attr('opacity',n.h>=26?1:0);
+      g.select('.sk-node-value').transition(tr).attr('y',n.cy+9).attr('opacity',n.h>=42?1:0)
+        .on('end',function(){ d3.select(this).text(fmt(n.value,d.unit_label)); });
     });
   }
 }
@@ -255,6 +338,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
     dz.addEventListener('dragleave',()=>{dz.style.borderColor='';});
     dz.addEventListener('drop',e=>{e.preventDefault();dz.style.borderColor='';const f=e.dataTransfer.files[0];if(f&&f.name.endsWith('.json'))sankey.loadFile(f);});
   }
+  const btnSvg=document.getElementById('btn-export-svg');
+  const btnJpg=document.getElementById('btn-export-jpg');
+  if(btnSvg) btnSvg.addEventListener('click',()=>sankey._exportSVG());
+  if(btnJpg) btnJpg.addEventListener('click',()=>sankey._exportJPG());
+
   let rt;
   window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>{if(sankey.multiData)sankey._gotoIdx(sankey.currentIdx,false);},250);});
 });

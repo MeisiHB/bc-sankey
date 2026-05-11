@@ -398,6 +398,44 @@
   line-height: 1.5;
 }
 
+/* ── Gap slider (Formatierung tab) ───────────────────────────────────────── */
+
+.bc-gap-slider-wrap {
+  padding: 0.5rem 0 0.25rem;
+}
+
+.bc-gap-slider {
+  width: 100%;
+  accent-color: var(--bc-primary);
+  cursor: pointer;
+  height: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, var(--bc-primary) 0%, var(--bc-primary) 33.3%, #D8D8D8 33.3%);
+  border-radius: 2px;
+  outline: none;
+}
+
+.bc-gap-slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--bc-primary);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.22);
+  cursor: pointer;
+}
+
+.bc-gap-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: var(--bc-size-xs);
+  color: var(--bc-text-muted);
+  user-select: none;
+}
+
 /* ── Modal footer ─────────────────────────────────────────────────────────── */
 
 .bc-modal__footer {

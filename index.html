@@ -14,8 +14,12 @@
     .bc-btn--toggle{font-family:var(--bc-font);font-size:var(--bc-size-sm);padding:0.3rem 0.75rem;border-radius:var(--bc-radius);border:1px solid #C8C8C8;background:#fff;color:var(--bc-secondary);cursor:pointer;transition:background 0.15s,color 0.15s,border-color 0.15s}
     .bc-btn--toggle:hover{border-color:var(--bc-primary);color:var(--bc-primary)}
     .bc-btn--toggle.active{background:var(--bc-primary);border-color:var(--bc-primary);color:#fff}
-    .bc-btn--play{font-family:var(--bc-font-bold);font-size:var(--bc-size-sm);padding:0.3rem 1rem;border-radius:var(--bc-radius);border:1px solid var(--bc-primary);background:var(--bc-primary);color:#fff;cursor:pointer;min-width:90px;transition:background 0.15s}
+    .bc-btn--play{font-family:var(--bc-font-bold);font-size:var(--bc-size-sm);padding:0.3rem 1rem;border-radius:var(--bc-radius);border:1px solid var(--bc-primary);background:var(--bc-primary);color:#fff;cursor:pointer;min-width:90px;transition:background 0.15s,border-color 0.15s}
     .bc-btn--play:hover{background:var(--bc-primary-dark);border-color:var(--bc-primary-dark)}
+    .bc-btn--play.bc-btn--paused{background:#E89E63;border-color:#D4874A}
+    .bc-btn--play.bc-btn--paused:hover{background:#D4874A;border-color:#B8733A}
+    .bc-btn--export{display:inline-flex;align-items:center;gap:4px;font-family:var(--bc-font);font-size:var(--bc-size-xs);padding:0.25rem 0.6rem;border-radius:var(--bc-radius);border:1px solid #C8C8C8;background:#fff;color:var(--bc-secondary);cursor:pointer;transition:background 0.15s,border-color 0.15s,color 0.15s}
+    .bc-btn--export:hover{border-color:var(--bc-primary);color:var(--bc-primary)}
     .bc-select{font-family:var(--bc-font);font-size:var(--bc-size-sm);color:var(--bc-secondary);border:1px solid #C8C8C8;border-radius:var(--bc-radius);padding:0.28rem 0.5rem;background:#fff;cursor:pointer;outline:none;max-width:130px}
     .bc-select:hover,.bc-select:focus{border-color:var(--bc-primary)}
     .bc-period-badge{margin-left:auto;font-family:var(--bc-font-bold);font-size:var(--bc-size-sm-plus);color:var(--bc-primary);white-space:nowrap}
@@ -66,9 +70,9 @@
   </div>
   <div class="bc-toolbar--anim">
     <span class="bc-toolbar__label">Intervall:</span>
-    <button class="bc-btn--toggle active" id="btn-month">Monat</button>
-    <button class="bc-btn--toggle" id="btn-quarter">Quartal</button>
-    <button class="bc-btn--toggle" id="btn-year">Jahr</button>
+    <button class="bc-btn--toggle active" id="btn-month" data-interval="month">Monat</button>
+    <button class="bc-btn--toggle" id="btn-quarter" data-interval="quarter">Quartal</button>
+    <button class="bc-btn--toggle" id="btn-year" data-interval="year">Jahr</button>
     <div class="bc-toolbar__sep"></div>
     <span class="bc-toolbar__label">Von:</span>
     <select class="bc-select" id="sel-from"></select>
@@ -87,6 +91,16 @@
     <div class="bc-card__header">
       <span class="bc-card__title" id="diagram-title">Sankey P&amp;L</span>
       <span style="font-size:9pt;color:#A7ADB6;">Maus &uuml;ber Knoten und Fl&uuml;sse f&uuml;r Details</span>
+      <div class="bc-export-btns" style="margin-left:auto;display:flex;gap:0.4rem;align-items:center;">
+        <button class="bc-btn--export" id="btn-export-svg" title="Als SVG speichern">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+          SVG
+        </button>
+        <button class="bc-btn--export" id="btn-export-jpg" title="Als JPG speichern">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg>
+          JPG
+        </button>
+      </div>
     </div>
     <div id="sankey-container"></div>
     <div id="drop-zone" class="bc-upload" style="margin-top:0.75rem;display:none;">JSON-Datei hier ablegen oder <strong>JSON laden</strong> klicken</div>
@@ -115,7 +129,7 @@
   document.getElementById('btn-login').addEventListener('click',async()=>{try{const a=await signIn();if(a)updateAuthUI(a);}catch(e){alert('Anmeldung fehlgeschlagen: '+e.message);}});
   accountBadge.addEventListener('click',async()=>{if(confirm('Abmelden?')){await signOut();updateAuthUI(null);}});
   schemaBtn.addEventListener('click',async()=>{const s=loadSettings();if(!s.accountScheduleName){alert('Kein Kontenschema konfiguriert.');return;}if(!s.tenantId||!s.companyId){alert('Bitte Tenant und Mandant konfigurieren.');return;}schemaBtn.disabled=true;schemaBtn.querySelector('.bc-schema-name').textContent='Lädt...';try{const u=buildODataCompanyUrl(s.tenantId,s.environment||'production',s.companyId),l=buildAccScheduleLinesUrl(u,s.accountScheduleName),r=await bcGet(l,null),lines=parseAccScheduleLines(r),f=filterSankeyRelevantLines(lines),d=convertScheduleToSankey(f,s.accountScheduleName);if(d&&window.bcSankey){if(d._warning)alert('Hinweis: '+d._warning);window.bcSankey.load(d);}else{alert('Keine Daten erhalten.');}}catch(e){alert('Fehler: '+e.message+(e.statusCode===404?'\n\nTipp: Page 104 als OData-Webservice in BC veröffentlichen.':''));}finally{schemaBtn.disabled=false;schemaBadge.textContent=loadSettings().accountScheduleName||'';}});
-  document.addEventListener('bc-settings-saved',(e)=>{const s=e.detail;if(s.clientId&&s.tenantId)initAuth(s.clientId,s.tenantId);updateAuthUI(getAccount());updateSchemaBtn();});
+  document.addEventListener('bc-settings-saved',(e)=>{const s=e.detail;if(s.clientId&&s.tenantId)initAuth(s.clientId,s.tenantId);updateAuthUI(getAccount());updateSchemaBtn();if(window.bcSankey&&window.bcSankey.multiData){const sc=window.bcSankey;sc.stop();const svg=document.getElementById('sankey-svg');if(svg)svg.remove();sc._gotoIdx(sc.currentIdx,false);}});
   document.addEventListener('bc-local-file-selected',(e)=>{if(window.bcSankey)window.bcSankey.loadFile(e.detail);});
   init();
 </script>
